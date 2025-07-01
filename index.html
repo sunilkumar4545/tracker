@@ -1,0 +1,2314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JobTrack Pro - Career Management</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #f5f5f5;
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      .app-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        background: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px 20px 20px 20px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .header h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .header p {
+        opacity: 0.95;
+        font-size: 15px;
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .nav-tabs {
+        display: flex;
+        background: white;
+        border-bottom: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .nav-tab {
+        flex: 1;
+        padding: 12px 6px;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 10px;
+        color: #757575;
+        font-weight: 500;
+        min-height: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 60px;
+        white-space: nowrap;
+      }
+
+      .nav-tab.active {
+        background: white;
+        color: #667eea;
+        border-bottom: 2px solid #667eea;
+        transform: translateY(-1px);
+      }
+
+      .nav-tab i {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 2px;
+      }
+
+      .tab-content {
+        display: none;
+        padding: 16px;
+        min-height: calc(100vh - 140px);
+        background: #f8f9fa;
+        flex: 1;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .add-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        padding: 18px 24px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        position: relative;
+        overflow: hidden;
+        text-transform: none;
+        letter-spacing: 0.5px;
+      }
+
+      .add-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      }
+
+      .add-btn:active {
+        transform: translateY(-1px);
+        transition: all 0.1s ease;
+      }
+
+      .add-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .add-btn:hover::before {
+        left: 100%;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .card:hover::before {
+        opacity: 1;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .card-title {
+        font-weight: 600;
+        color: #212121;
+        flex: 1;
+        font-size: 16px;
+        line-height: 1.4;
+        margin-right: 12px;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .btn-small {
+        background: #f5f5f5;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s ease;
+        min-width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-edit {
+        color: #4caf50;
+        background: rgba(76, 175, 80, 0.1);
+      }
+
+      .btn-edit:hover {
+        background: rgba(76, 175, 80, 0.2);
+        transform: scale(1.05);
+      }
+
+      .btn-delete {
+        color: #f44336;
+        background: rgba(244, 67, 54, 0.1);
+      }
+
+      .btn-delete:hover {
+        background: rgba(244, 67, 54, 0.2);
+        transform: scale(1.05);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 8% auto;
+        padding: 24px;
+        border-radius: 20px;
+        width: 92%;
+        max-width: 420px;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .close {
+        font-size: 24px;
+        cursor: pointer;
+        color: #aaa;
+      }
+
+      .close:hover {
+        color: #000;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
+        cursor: default;
+      }
+
+      .status-badge:hover {
+        transform: translateY(-1px);
+      }
+
+      .status-applied {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        color: #1565c0;
+        border: 1px solid #90caf9;
+      }
+      .status-interview {
+        background: linear-gradient(135deg, #fff3e0, #ffcc02);
+        color: #e65100;
+        border: 1px solid #ffb74d;
+      }
+      .status-offer {
+        background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+        color: #2e7d32;
+        border: 1px solid #81c784;
+      }
+      .status-rejected {
+        background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        color: #c62828;
+        border: 1px solid #ef5350;
+      }
+      .status-pending {
+        background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+        color: #6a1b9a;
+        border: 1px solid #ba68c8;
+      }
+
+      .priority-high {
+        border-left-color: #dc3545;
+      }
+      .priority-medium {
+        border-left-color: #ffc107;
+      }
+      .priority-low {
+        border-left-color: #28a745;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c757d;
+      }
+
+      .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+      }
+
+      .job-meta {
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 8px;
+      }
+
+      .search-box {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #f0f0f0;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        font-size: 16px;
+        background: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .search-box:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background: white;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 4px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .todo-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.6s ease;
+      }
+
+      .todo-item:hover::before {
+        left: 100%;
+      }
+
+      .todo-item:hover {
+        transform: translateX(8px) translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        border-left-color: #667eea;
+      }
+
+      .todo-checkbox {
+        position: relative;
+        margin-right: 16px;
+      }
+
+      .todo-checkbox input[type="checkbox"] {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .todo-checkbox input[type="checkbox"]:checked {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        transform: scale(1.1);
+      }
+
+      .todo-checkbox input[type="checkbox"]:checked::after {
+        content: "✓";
+        position: absolute;
+        top: -1px;
+        left: 4px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        animation: checkmark 0.3s ease;
+      }
+
+      @keyframes checkmark {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .todo-content {
+        flex: 1;
+        margin-right: 12px;
+      }
+
+      .todo-text {
+        font-weight: 500;
+        margin-bottom: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .todo-meta {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        gap: 12px;
+      }
+
+      .todo-item.completed .todo-text {
+        text-decoration: line-through;
+        color: #999;
+      }
+
+      .todo-item.completed {
+        opacity: 0.6;
+        background: #f8f9fa;
+      }
+
+      /* Timer & Pomodoro Styles */
+      .timer-container {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .timer-circle {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 30px;
+      }
+
+      .timer-circle svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .timer-circle-bg {
+        fill: none;
+        stroke: #f0f0f0;
+        stroke-width: 8;
+      }
+
+      .timer-circle-progress {
+        fill: none;
+        stroke: #667eea;
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dasharray 1s ease;
+      }
+
+      .timer-display {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .timer-controls {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .timer-btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 100px;
+      }
+
+      .timer-btn.primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .timer-btn.secondary {
+        background: #f8f9fa;
+        color: #333;
+        border: 2px solid #e9ecef;
+      }
+
+      .timer-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .timer-modes {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .timer-mode {
+        padding: 8px 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 20px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .timer-mode.active {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+      }
+
+      /* Streak Calendar Styles */
+      .streak-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .streak-count {
+        font-size: 48px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+
+      .streak-label {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .calendar-day.header {
+        color: #666;
+        font-weight: 600;
+        cursor: default;
+      }
+
+      .calendar-day.completed {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .calendar-day.today {
+        border: 2px solid #667eea;
+        color: #667eea;
+        font-weight: 700;
+      }
+
+      .calendar-day:hover:not(.header):not(.completed) {
+        background: #f0f0f0;
+        transform: scale(1.05);
+      }
+
+      .streak-goals {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .streak-goal {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+      }
+
+      .streak-goal:hover {
+        transform: translateX(4px);
+        background: #e9ecef;
+      }
+
+      .goal-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 18px;
+        color: white;
+      }
+
+      .goal-content {
+        flex: 1;
+      }
+
+      .goal-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .goal-streak {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* Enhanced Todo Styles with Animations */
+      .todo-item {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background: white;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 4px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .todo-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.6s ease;
+      }
+
+      .todo-item:hover::before {
+        left: 100%;
+      }
+
+      .todo-item:hover {
+        transform: translateX(8px) translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        border-left-color: #667eea;
+      }
+
+      .todo-checkbox {
+        position: relative;
+        margin-right: 16px;
+      }
+
+      .todo-checkbox input[type="checkbox"] {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .todo-checkbox input[type="checkbox"]:checked {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        transform: scale(1.1);
+      }
+
+      .todo-checkbox input[type="checkbox"]:checked::after {
+        content: "✓";
+        position: absolute;
+        top: -1px;
+        left: 4px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        animation: checkmark 0.3s ease;
+      }
+
+      @keyframes checkmark {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .todo-content {
+        flex: 1;
+        margin-right: 12px;
+      }
+
+      .todo-text {
+        font-weight: 500;
+        margin-bottom: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .todo-meta {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        gap: 12px;
+      }
+
+      .todo-item.completed .todo-text {
+        text-decoration: line-through;
+        color: #999;
+      }
+
+      .todo-item.completed {
+        opacity: 0.6;
+        background: #f8f9fa;
+      }
+
+      /* Document Upload Styles */
+      .upload-area {
+        border: 3px dashed #ddd;
+        border-radius: 16px;
+        padding: 40px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-bottom: 20px;
+        background: white;
+      }
+
+      .upload-area:hover {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.05);
+      }
+
+      .upload-area.dragover {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+        transform: scale(1.02);
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        color: #ddd;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .upload-area:hover .upload-icon {
+        color: #667eea;
+        transform: scale(1.1);
+      }
+
+      .document-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .document-card {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .document-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .document-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+        color: #667eea;
+      }
+
+      .document-name {
+        font-size: 12px;
+        font-weight: 500;
+        word-break: break-word;
+        margin-bottom: 8px;
+      }
+
+      .document-size {
+        font-size: 10px;
+        color: #666;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #f0f0f0;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      /* Enhanced Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 15px;
+        border-radius: 16px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+
+      @media (max-width: 480px) {
+        .app-container {
+          margin: 0;
+          border-radius: 0;
+          min-height: 100vh;
+        }
+
+        body {
+          padding: 0;
+        }
+
+        .nav-tab {
+          font-size: 9px;
+          padding: 10px 4px;
+        }
+
+        .nav-tab i {
+          font-size: 16px;
+        }
+
+        .timer-circle {
+          width: 160px;
+          height: 160px;
+        }
+
+        .timer-display {
+          font-size: 24px;
+        }
+
+        .streak-count {
+          font-size: 36px;
+        }
+
+        .calendar-grid {
+          padding: 15px;
+          gap: 6px;
+        }
+
+        .document-grid {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="header">
+        <h1><i class="fas fa-rocket"></i> JobTrack Pro</h1>
+        <p>Your career management companion</p>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="dashboard">
+          <i class="fas fa-chart-pie"></i>
+          Dashboard
+        </button>
+        <button class="nav-tab" data-tab="jobs">
+          <i class="fas fa-briefcase"></i>
+          Jobs
+        </button>
+        <button class="nav-tab" data-tab="timer">
+          <i class="fas fa-stopwatch"></i>
+          Timer
+        </button>
+        <button class="nav-tab" data-tab="streak">
+          <i class="fas fa-calendar-check"></i>
+          Streak
+        </button>
+        <button class="nav-tab" data-tab="todos">
+          <i class="fas fa-tasks"></i>
+          To-Do
+        </button>
+        <button class="nav-tab" data-tab="notes">
+          <i class="fas fa-sticky-note"></i>
+          Notes
+        </button>
+        <button class="nav-tab" data-tab="documents">
+          <i class="fas fa-file-upload"></i>
+          Docs
+        </button>
+      </div>
+
+      <!-- Dashboard Tab -->
+      <div class="tab-content active" id="dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="totalJobs">0</div>
+            <div class="stat-label">Total Applications</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="interviewCount">0</div>
+            <div class="stat-label">Interviews</div>
+          </div>
+        </div>
+
+        <h3>Recent Activity</h3>
+        <div id="recentActivity">
+          <div class="empty-state">
+            <i class="fas fa-chart-line"></i>
+            <p>No recent activity</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Tab -->
+      <div class="tab-content" id="timer">
+        <div class="timer-container">
+          <div class="timer-modes">
+            <div class="timer-mode active" data-mode="pomodoro">
+              🍅 Pomodoro
+            </div>
+            <div class="timer-mode" data-mode="short">☕ Short Break</div>
+            <div class="timer-mode" data-mode="long">🏖️ Long Break</div>
+            <div class="timer-mode" data-mode="custom">⚙️ Custom</div>
+          </div>
+
+          <div class="timer-circle">
+            <svg>
+              <circle class="timer-circle-bg" cx="100" cy="100" r="90"></circle>
+              <circle
+                class="timer-circle-progress"
+                cx="100"
+                cy="100"
+                r="90"
+                stroke-dasharray="565.48"
+                stroke-dashoffset="565.48"
+              ></circle>
+            </svg>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+          </div>
+
+          <div class="timer-controls">
+            <button class="timer-btn primary" id="timerStart">Start</button>
+            <button class="timer-btn secondary" id="timerPause">Pause</button>
+            <button class="timer-btn secondary" id="timerReset">Reset</button>
+          </div>
+
+          <div class="card">
+            <h3>🎯 Current Session</h3>
+            <p>Focus on your most important job search task</p>
+            <div
+              id="currentTask"
+              style="font-weight: 600; color: #667eea; margin-top: 10px"
+            >
+              No active task
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>📊 Today's Progress</h3>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" id="todaySessions">0</div>
+                <div class="stat-label">Sessions</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="todayMinutes">0</div>
+                <div class="stat-label">Minutes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak Calendar Tab -->
+      <div class="tab-content" id="streak">
+        <div class="streak-header">
+          <div class="streak-count" id="currentStreak">7</div>
+          <div class="streak-label">🔥 Day Streak</div>
+          <p style="color: #666; font-size: 14px">
+            Keep building your job search momentum!
+          </p>
+        </div>
+
+        <div class="calendar-grid" id="streakCalendar">
+          <!-- Calendar will be generated by JavaScript -->
+        </div>
+
+        <div class="streak-goals">
+          <h3 style="margin-bottom: 20px">📅 Daily Goals</h3>
+
+          <div class="streak-goal" data-goal="application">
+            <div
+              class="goal-icon"
+              style="background: linear-gradient(135deg, #667eea, #764ba2)"
+            >
+              📝
+            </div>
+            <div class="goal-content">
+              <div class="goal-title">Apply to 1+ Jobs</div>
+              <div class="goal-streak">Completed today ✅</div>
+            </div>
+          </div>
+
+          <div class="streak-goal" data-goal="networking">
+            <div
+              class="goal-icon"
+              style="background: linear-gradient(135deg, #ff6b6b, #ee5a24)"
+            >
+              🤝
+            </div>
+            <div class="goal-content">
+              <div class="goal-title">Network/Outreach</div>
+              <div class="goal-streak">2 contacts made today</div>
+            </div>
+          </div>
+
+          <div class="streak-goal" data-goal="skills">
+            <div
+              class="goal-icon"
+              style="background: linear-gradient(135deg, #26de81, #20bf6b)"
+            >
+              📚
+            </div>
+            <div class="goal-content">
+              <div class="goal-title">Skill Building</div>
+              <div class="goal-streak">30 min study session</div>
+            </div>
+          </div>
+
+          <div class="streak-goal" data-goal="resume">
+            <div
+              class="goal-icon"
+              style="background: linear-gradient(135deg, #fd9644, #f39c12)"
+            >
+              📄
+            </div>
+            <div class="goal-content">
+              <div class="goal-title">Resume Update</div>
+              <div class="goal-streak">Ready for tomorrow</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="jobs">
+        <input
+          type="text"
+          class="search-box"
+          id="jobSearch"
+          placeholder="🔍 Search jobs, companies, roles..."
+        />
+        <button class="add-btn" onclick="openJobModal()">
+          <i class="fas fa-plus"></i> Add New Job Application
+        </button>
+
+        <div class="stats-grid" style="margin-bottom: 20px">
+          <div class="stat-card">
+            <div class="stat-number" id="totalApplications">0</div>
+            <div class="stat-label">Applications</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="interviewsScheduled">0</div>
+            <div class="stat-label">Interviews</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="offersReceived">0</div>
+            <div class="stat-label">Offers</div>
+          </div>
+        </div>
+
+        <div id="jobsList">
+          <div class="empty-state">
+            <i class="fas fa-briefcase"></i>
+            <p>No job applications yet</p>
+            <small style="color: #999"
+              >Start tracking your applications to see your progress!</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes Tab -->
+      <div class="tab-content" id="notes">
+        <input
+          type="text"
+          class="search-box"
+          id="noteSearch"
+          placeholder="🔍 Search notes and tips..."
+        />
+        <button class="add-btn" onclick="openNoteModal()">
+          <i class="fas fa-plus"></i> Add New Note
+        </button>
+
+        <div class="stats-grid" style="margin-bottom: 20px">
+          <div class="stat-card">
+            <div class="stat-number" id="totalNotes">0</div>
+            <div class="stat-label">Notes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="interviewTips">0</div>
+            <div class="stat-label">Interview Tips</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="companyResearch">0</div>
+            <div class="stat-label">Research</div>
+          </div>
+        </div>
+
+        <div id="notesList">
+          <div class="empty-state">
+            <i class="fas fa-sticky-note"></i>
+            <p>No notes yet</p>
+            <small style="color: #999"
+              >Start capturing your interview tips and insights!</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Tab -->
+      <div class="tab-content" id="documents">
+        <div
+          class="upload-area"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          <div class="upload-icon">📎</div>
+          <h3>Upload Documents</h3>
+          <p>
+            Drag & drop or click to upload resumes, certificates, portfolios
+          </p>
+          <small style="color: #666"
+            >Supported: PDF, DOC, DOCX, JPG, PNG (Max 10MB)</small
+          >
+          <input
+            type="file"
+            id="fileInput"
+            multiple
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            style="display: none"
+          />
+        </div>
+
+        <div class="stats-grid" style="margin-bottom: 20px">
+          <div class="stat-card">
+            <div class="stat-number" id="totalDocs">0</div>
+            <div class="stat-label">Documents</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="resumeVersions">0</div>
+            <div class="stat-label">Resumes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="certificates">0</div>
+            <div class="stat-label">Certificates</div>
+          </div>
+        </div>
+
+        <div id="documentsList">
+          <div class="empty-state">
+            <i class="fas fa-file-upload"></i>
+            <p>No documents uploaded</p>
+            <small style="color: #999"
+              >Upload your resumes and certificates to keep them
+              organized!</small
+            >
+          </div>
+        </div>
+
+        <div class="document-grid" id="documentGrid">
+          <!-- Documents will be displayed here -->
+        </div>
+      </div>
+
+      <!-- Remove Wishlist Tab -->
+      <div class="tab-content" id="wishlist" style="display: none">
+        <!-- This tab is now removed from navigation but kept for compatibility -->
+      </div>
+
+      <!-- Todos Tab -->
+      <div class="tab-content" id="todos">
+        <button class="add-btn" onclick="openTodoModal()">
+          <i class="fas fa-plus"></i> Add New Task
+        </button>
+
+        <div class="stats-grid" style="margin-bottom: 20px">
+          <div class="stat-card">
+            <div class="stat-number" id="totalTasks">0</div>
+            <div class="stat-label">Total Tasks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="completedTasks">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="completionRate">0%</div>
+            <div class="stat-label">Success Rate</div>
+          </div>
+        </div>
+
+        <div id="todosList">
+          <div class="empty-state">
+            <i class="fas fa-tasks"></i>
+            <p>No tasks yet</p>
+            <small style="color: #999"
+              >Create your first task to get started!</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <button class="fab" onclick="openJobModal()">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+
+    <!-- Job Modal -->
+    <div id="jobModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="jobModalTitle">Add Job Application</h2>
+          <span class="close" onclick="closeJobModal()">&times;</span>
+        </div>
+        <form id="jobForm">
+          <div class="form-group">
+            <label for="jobTitle">Job Title *</label>
+            <input
+              type="text"
+              id="jobTitle"
+              required
+              placeholder="e.g. Software Engineer"
+            />
+          </div>
+          <div class="form-group">
+            <label for="company">Company *</label>
+            <input
+              type="text"
+              id="company"
+              required
+              placeholder="e.g. Google"
+            />
+          </div>
+          <div class="form-group">
+            <label for="jobRole">Role/Position</label>
+            <input
+              type="text"
+              id="jobRole"
+              placeholder="e.g. Frontend Developer"
+            />
+          </div>
+          <div class="form-group">
+            <label for="salary">Salary Range</label>
+            <input
+              type="text"
+              id="salary"
+              placeholder="e.g. $80,000 - $120,000"
+            />
+          </div>
+          <div class="form-group">
+            <label for="appliedDate">Applied Date</label>
+            <input type="date" id="appliedDate" />
+          </div>
+          <div class="form-group">
+            <label for="jobStatus">Status</label>
+            <select id="jobStatus">
+              <option value="applied">📝 Applied</option>
+              <option value="interview">📞 Interview Scheduled</option>
+              <option value="pending">⏳ Pending Response</option>
+              <option value="offer">🎉 Offer Received</option>
+              <option value="rejected">❌ Rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="jobDescription">Job Description</label>
+            <textarea
+              id="jobDescription"
+              placeholder="Paste the complete job description here..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="jobNotes">Notes & Contacts</label>
+            <textarea
+              id="jobNotes"
+              placeholder="Interview notes, recruiter contacts, follow-up reminders..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="jobUrl">Job URL</label>
+            <input
+              type="url"
+              id="jobUrl"
+              placeholder="https://careers.company.com/job/123"
+            />
+          </div>
+          <button type="submit" class="btn-primary" id="jobSubmitBtn">
+            Add Job Application
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div id="noteModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="noteModalTitle">Add Note</h2>
+          <span class="close" onclick="closeNoteModal()">&times;</span>
+        </div>
+        <form id="noteForm">
+          <div class="form-group">
+            <label for="noteTitle">Title *</label>
+            <input
+              type="text"
+              id="noteTitle"
+              required
+              placeholder="e.g. Amazon Interview Tips"
+            />
+          </div>
+          <div class="form-group">
+            <label for="noteContent">Content</label>
+            <textarea
+              id="noteContent"
+              placeholder="Write your tips, insights, or notes here..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="noteCategory">Category</label>
+            <select id="noteCategory">
+              <option value="interview">💼 Interview Tips</option>
+              <option value="research">🔍 Company Research</option>
+              <option value="resume">📄 Resume Notes</option>
+              <option value="networking">🤝 Networking</option>
+              <option value="skills">📚 Skills & Learning</option>
+              <option value="salary">💰 Salary Negotiation</option>
+              <option value="general">📝 General</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary" id="noteSubmitBtn">
+            Add Note
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlistModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="wishlistModalTitle">Add to Wishlist</h2>
+          <span class="close" onclick="closeWishlistModal()">&times;</span>
+        </div>
+        <form id="wishlistForm">
+          <div class="form-group">
+            <label for="wishlistTitle">Title *</label>
+            <input type="text" id="wishlistTitle" required />
+          </div>
+          <div class="form-group">
+            <label for="wishlistType">Type</label>
+            <select id="wishlistType">
+              <option value="company">Dream Company</option>
+              <option value="position">Dream Position</option>
+              <option value="skill">Skill to Learn</option>
+              <option value="certification">Certification</option>
+              <option value="goal">Career Goal</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="wishlistPriority">Priority</label>
+            <select id="wishlistPriority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="wishlistDescription">Description</label>
+            <textarea
+              id="wishlistDescription"
+              placeholder="Why is this important to you?"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn-primary" id="wishlistSubmitBtn">
+            Add to Wishlist
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Todo Modal -->
+    <div id="todoModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="todoModalTitle">Add Task</h2>
+          <span class="close" onclick="closeTodoModal()">&times;</span>
+        </div>
+        <form id="todoForm">
+          <div class="form-group">
+            <label for="todoTitle">Task *</label>
+            <input
+              type="text"
+              id="todoTitle"
+              required
+              placeholder="e.g. Apply to Microsoft Software Engineer role"
+            />
+          </div>
+          <div class="form-group">
+            <label for="todoCategory">Category</label>
+            <select id="todoCategory">
+              <option value="application">📝 Job Application</option>
+              <option value="interview">💼 Interview Prep</option>
+              <option value="networking">🤝 Networking</option>
+              <option value="skills">📚 Skill Building</option>
+              <option value="research">🔍 Company Research</option>
+              <option value="resume">📄 Resume/Portfolio</option>
+              <option value="followup">📞 Follow-up</option>
+              <option value="general">⚡ General</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="todoPriority">Priority</label>
+            <select id="todoPriority">
+              <option value="high">🔥 High Priority</option>
+              <option value="medium">⚡ Medium Priority</option>
+              <option value="low">📝 Low Priority</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="todoDueDate">Due Date</label>
+            <input type="date" id="todoDueDate" />
+          </div>
+          <div class="form-group">
+            <label for="todoDescription">Description</label>
+            <textarea
+              id="todoDescription"
+              placeholder="Add task details, requirements, or notes..."
+            ></textarea>
+          </div>
+          <button type="submit" class="btn-primary" id="todoSubmitBtn">
+            Add Task
+          </button>
+        </form>
+      </div>
+    </div>
+<script>
+    // Job Tracker & Notes App JavaScript
+
+class JobTrackerApp {
+    constructor() {
+        this.jobs = this.loadData('jobs') || [];
+        this.notes = this.loadData('notes') || [];
+        this.wishlist = this.loadData('wishlist') || [];
+        this.todos = this.loadData('todos') || [];
+        this.currentEditId = null;
+        this.currentEditType = null;
+        
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.renderAll();
+        this.updateStats();
+    }
+
+    setupEventListeners() {
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+        });
+
+        // Search functionality
+        document.getElementById('jobSearch').addEventListener('input', (e) => this.searchJobs(e.target.value));
+        document.getElementById('noteSearch').addEventListener('input', (e) => this.searchNotes(e.target.value));
+        document.getElementById('wishlistSearch').addEventListener('input', (e) => this.searchWishlist(e.target.value));
+
+        // Form submissions
+        document.getElementById('jobForm').addEventListener('submit', (e) => this.handleJobSubmit(e));
+        document.getElementById('noteForm').addEventListener('submit', (e) => this.handleNoteSubmit(e));
+        document.getElementById('wishlistForm').addEventListener('submit', (e) => this.handleWishlistSubmit(e));
+        document.getElementById('todoForm').addEventListener('submit', (e) => this.handleTodoSubmit(e));
+
+        // Set default date to today
+        document.getElementById('appliedDate').value = this.getTodayDate();
+    }
+
+    switchTab(tabName) {
+        // Update active tab
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+        // Show corresponding content
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+
+        // Render content if needed
+        if (tabName === 'dashboard') {
+            this.renderDashboard();
+        }
+    }
+
+    // Data management
+    saveData(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    loadData(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    }
+
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    getTodayDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    }
+
+    // Job Management
+    handleJobSubmit(e) {
+        e.preventDefault();
+        
+        const jobData = {
+            id: this.currentEditId || this.generateId(),
+            title: document.getElementById('jobTitle').value,
+            company: document.getElementById('company').value,
+            role: document.getElementById('jobRole').value,
+            appliedDate: document.getElementById('appliedDate').value,
+            status: document.getElementById('jobStatus').value,
+            description: document.getElementById('jobDescription').value,
+            notes: document.getElementById('jobNotes').value,
+            url: document.getElementById('jobUrl').value,
+            createdAt: this.currentEditId ? this.jobs.find(j => j.id === this.currentEditId).createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        if (this.currentEditId) {
+            const index = this.jobs.findIndex(j => j.id === this.currentEditId);
+            this.jobs[index] = jobData;
+        } else {
+            this.jobs.unshift(jobData);
+        }
+
+        this.saveData('jobs', this.jobs);
+        this.renderJobs();
+        this.updateStats();
+        this.closeJobModal();
+        this.resetJobForm();
+    }
+
+    openJobModal(jobId = null) {
+        this.currentEditId = jobId;
+        const modal = document.getElementById('jobModal');
+        const title = document.getElementById('jobModalTitle');
+        const submitBtn = document.getElementById('jobSubmitBtn');
+
+        if (jobId) {
+            const job = this.jobs.find(j => j.id === jobId);
+            title.textContent = 'Edit Job Application';
+            submitBtn.textContent = 'Update Job';
+            this.fillJobForm(job);
+        } else {
+            title.textContent = 'Add Job Application';
+            submitBtn.textContent = 'Add Job';
+            this.resetJobForm();
+        }
+
+        modal.style.display = 'block';
+    }
+
+    closeJobModal() {
+        document.getElementById('jobModal').style.display = 'none';
+        this.currentEditId = null;
+    }
+
+    fillJobForm(job) {
+        document.getElementById('jobTitle').value = job.title || '';
+        document.getElementById('company').value = job.company || '';
+        document.getElementById('jobRole').value = job.role || '';
+        document.getElementById('appliedDate').value = job.appliedDate || '';
+        document.getElementById('jobStatus').value = job.status || 'applied';
+        document.getElementById('jobDescription').value = job.description || '';
+        document.getElementById('jobNotes').value = job.notes || '';
+        document.getElementById('jobUrl').value = job.url || '';
+    }
+
+    resetJobForm() {
+        document.getElementById('jobForm').reset();
+        document.getElementById('appliedDate').value = this.getTodayDate();
+    }
+
+    deleteJob(jobId) {
+        if (confirm('Are you sure you want to delete this job application?')) {
+            this.jobs = this.jobs.filter(j => j.id !== jobId);
+            this.saveData('jobs', this.jobs);
+            this.renderJobs();
+            this.updateStats();
+        }
+    }
+
+    searchJobs(query) {
+        const filtered = this.jobs.filter(job => 
+            job.title.toLowerCase().includes(query.toLowerCase()) ||
+            job.company.toLowerCase().includes(query.toLowerCase()) ||
+            job.role.toLowerCase().includes(query.toLowerCase())
+        );
+        this.renderJobs(filtered);
+    }
+
+    renderJobs(jobsToRender = this.jobs) {
+        const container = document.getElementById('jobsList');
+        
+        if (jobsToRender.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-briefcase"></i>
+                    <p>No job applications found</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = jobsToRender.map(job => `
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">${job.title} at ${job.company}</div>
+                    <div class="card-actions">
+                        <button class="btn-small btn-edit" onclick="app.openJobModal('${job.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-small btn-delete" onclick="app.deleteJob('${job.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <span class="status-badge status-${job.status}">${job.status}</span>
+                    ${job.role ? `<span> • ${job.role}</span>` : ''}
+                    ${job.appliedDate ? `<span> • Applied: ${this.formatDate(job.appliedDate)}</span>` : ''}
+                </div>
+                ${job.description ? `<p style="margin-top: 10px; font-size: 14px; color: #666;">${job.description.substring(0, 150)}${job.description.length > 150 ? '...' : ''}</p>` : ''}
+                ${job.url ? `<a href="${job.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 12px;"><i class="fas fa-external-link-alt"></i> View Job</a>` : ''}
+            </div>
+        `).join('');
+    }
+
+    // Notes Management
+    handleNoteSubmit(e) {
+        e.preventDefault();
+        
+        const noteData = {
+            id: this.currentEditId || this.generateId(),
+            title: document.getElementById('noteTitle').value,
+            content: document.getElementById('noteContent').value,
+            category: document.getElementById('noteCategory').value,
+            createdAt: this.currentEditId ? this.notes.find(n => n.id === this.currentEditId).createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        if (this.currentEditId) {
+            const index = this.notes.findIndex(n => n.id === this.currentEditId);
+            this.notes[index] = noteData;
+        } else {
+            this.notes.unshift(noteData);
+        }
+
+        this.saveData('notes', this.notes);
+        this.renderNotes();
+        this.closeNoteModal();
+        this.resetNoteForm();
+    }
+
+    openNoteModal(noteId = null) {
+        this.currentEditId = noteId;
+        const modal = document.getElementById('noteModal');
+        const title = document.getElementById('noteModalTitle');
+        const submitBtn = document.getElementById('noteSubmitBtn');
+
+        if (noteId) {
+            const note = this.notes.find(n => n.id === noteId);
+            title.textContent = 'Edit Note';
+            submitBtn.textContent = 'Update Note';
+            this.fillNoteForm(note);
+        } else {
+            title.textContent = 'Add Note';
+            submitBtn.textContent = 'Add Note';
+            this.resetNoteForm();
+        }
+
+        modal.style.display = 'block';
+    }
+
+    closeNoteModal() {
+        document.getElementById('noteModal').style.display = 'none';
+        this.currentEditId = null;
+    }
+
+    fillNoteForm(note) {
+        document.getElementById('noteTitle').value = note.title || '';
+        document.getElementById('noteContent').value = note.content || '';
+        document.getElementById('noteCategory').value = note.category || 'general';
+    }
+
+    resetNoteForm() {
+        document.getElementById('noteForm').reset();
+    }
+
+    deleteNote(noteId) {
+        if (confirm('Are you sure you want to delete this note?')) {
+            this.notes = this.notes.filter(n => n.id !== noteId);
+            this.saveData('notes', this.notes);
+            this.renderNotes();
+        }
+    }
+
+    searchNotes(query) {
+        const filtered = this.notes.filter(note => 
+            note.title.toLowerCase().includes(query.toLowerCase()) ||
+            note.content.toLowerCase().includes(query.toLowerCase())
+        );
+        this.renderNotes(filtered);
+    }
+
+    renderNotes(notesToRender = this.notes) {
+        const container = document.getElementById('notesList');
+        
+        if (notesToRender.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-sticky-note"></i>
+                    <p>No notes found</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = notesToRender.map(note => `
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">${note.title}</div>
+                    <div class="card-actions">
+                        <button class="btn-small btn-edit" onclick="app.openNoteModal('${note.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-small btn-delete" onclick="app.deleteNote('${note.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <span class="status-badge status-applied">${note.category}</span>
+                    <span> • ${this.formatDate(note.createdAt.split('T')[0])}</span>
+                </div>
+                ${note.content ? `<p style="margin-top: 10px; font-size: 14px; color: #666;">${note.content.substring(0, 200)}${note.content.length > 200 ? '...' : ''}</p>` : ''}
+            </div>
+        `).join('');
+    }
+
+    // Wishlist Management
+    handleWishlistSubmit(e) {
+        e.preventDefault();
+        
+        const wishlistData = {
+            id: this.currentEditId || this.generateId(),
+            title: document.getElementById('wishlistTitle').value,
+            type: document.getElementById('wishlistType').value,
+            priority: document.getElementById('wishlistPriority').value,
+            description: document.getElementById('wishlistDescription').value,
+            createdAt: this.currentEditId ? this.wishlist.find(w => w.id === this.currentEditId).createdAt : new Date().toISOString(),
+            completed: this.currentEditId ? this.wishlist.find(w => w.id === this.currentEditId).completed : false
+        };
+
+        if (this.currentEditId) {
+            const index = this.wishlist.findIndex(w => w.id === this.currentEditId);
+            this.wishlist[index] = wishlistData;
+        } else {
+            this.wishlist.unshift(wishlistData);
+        }
+
+        this.saveData('wishlist', this.wishlist);
+        this.renderWishlist();
+        this.closeWishlistModal();
+        this.resetWishlistForm();
+    }
+
+    openWishlistModal(wishlistId = null) {
+        this.currentEditId = wishlistId;
+        const modal = document.getElementById('wishlistModal');
+        const title = document.getElementById('wishlistModalTitle');
+        const submitBtn = document.getElementById('wishlistSubmitBtn');
+
+        if (wishlistId) {
+            const item = this.wishlist.find(w => w.id === wishlistId);
+            title.textContent = 'Edit Wishlist Item';
+            submitBtn.textContent = 'Update Item';
+            this.fillWishlistForm(item);
+        } else {
+            title.textContent = 'Add to Wishlist';
+            submitBtn.textContent = 'Add to Wishlist';
+            this.resetWishlistForm();
+        }
+
+        modal.style.display = 'block';
+    }
+
+    closeWishlistModal() {
+        document.getElementById('wishlistModal').style.display = 'none';
+        this.currentEditId = null;
+    }
+
+    fillWishlistForm(item) {
+        document.getElementById('wishlistTitle').value = item.title || '';
+        document.getElementById('wishlistType').value = item.type || 'other';
+        document.getElementById('wishlistPriority').value = item.priority || 'medium';
+        document.getElementById('wishlistDescription').value = item.description || '';
+    }
+
+    resetWishlistForm() {
+        document.getElementById('wishlistForm').reset();
+    }
+
+    deleteWishlistItem(itemId) {
+        if (confirm('Are you sure you want to delete this wishlist item?')) {
+            this.wishlist = this.wishlist.filter(w => w.id !== itemId);
+            this.saveData('wishlist', this.wishlist);
+            this.renderWishlist();
+        }
+    }
+
+    toggleWishlistComplete(itemId) {
+        const item = this.wishlist.find(w => w.id === itemId);
+        item.completed = !item.completed;
+        this.saveData('wishlist', this.wishlist);
+        this.renderWishlist();
+    }
+
+    searchWishlist(query) {
+        const filtered = this.wishlist.filter(item => 
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase())
+        );
+        this.renderWishlist(filtered);
+    }
+
+    renderWishlist(wishlistToRender = this.wishlist) {
+        const container = document.getElementById('wishlistList');
+        
+        if (wishlistToRender.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-heart"></i>
+                    <p>No wishlist items found</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = wishlistToRender.map(item => `
+            <div class="card priority-${item.priority} ${item.completed ? 'completed' : ''}">
+                <div class="card-header">
+                    <div class="card-title" style="${item.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">
+                        ${item.title}
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-small" onclick="app.toggleWishlistComplete('${item.id}')" title="${item.completed ? 'Mark as incomplete' : 'Mark as complete'}">
+                            <i class="fas fa-${item.completed ? 'undo' : 'check'}"></i>
+                        </button>
+                        <button class="btn-small btn-edit" onclick="app.openWishlistModal('${item.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-small btn-delete" onclick="app.deleteWishlistItem('${item.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <span class="status-badge status-${item.type}">${item.type}</span>
+                    <span class="status-badge status-${item.priority}">${item.priority} priority</span>
+                </div>
+                ${item.description ? `<p style="margin-top: 10px; font-size: 14px; color: #666;">${item.description}</p>` : ''}
+            </div>
+        `).join('');
+    }
+
+    // Todo Management
+    handleTodoSubmit(e) {
+        e.preventDefault();
+        
+        const todoData = {
+            id: this.currentEditId || this.generateId(),
+            title: document.getElementById('todoTitle').value,
+            priority: document.getElementById('todoPriority').value,
+            dueDate: document.getElementById('todoDueDate').value,
+            description: document.getElementById('todoDescription').value,
+            completed: this.currentEditId ? this.todos.find(t => t.id === this.currentEditId).completed : false,
+            createdAt: this.currentEditId ? this.todos.find(t => t.id === this.currentEditId).createdAt : new Date().toISOString()
+        };
+
+        if (this.currentEditId) {
+            const index = this.todos.findIndex(t => t.id === this.currentEditId);
+            this.todos[index] = todoData;
+        } else {
+            this.todos.unshift(todoData);
+        }
+
+        this.saveData('todos', this.todos);
+        this.renderTodos();
+        this.closeTodoModal();
+        this.resetTodoForm();
+    }
+
+    openTodoModal(todoId = null) {
+        this.currentEditId = todoId;
+        const modal = document.getElementById('todoModal');
+        const title = document.getElementById('todoModalTitle');
+        const submitBtn = document.getElementById('todoSubmitBtn');
+
+        if (todoId) {
+            const todo = this.todos.find(t => t.id === todoId);
+            title.textContent = 'Edit Task';
+            submitBtn.textContent = 'Update Task';
+            this.fillTodoForm(todo);
+        } else {
+            title.textContent = 'Add Task';
+            submitBtn.textContent = 'Add Task';
+            this.resetTodoForm();
+        }
+
+        modal.style.display = 'block';
+    }
+
+    closeTodoModal() {
+        document.getElementById('todoModal').style.display = 'none';
+        this.currentEditId = null;
+    }
+
+    fillTodoForm(todo) {
+        document.getElementById('todoTitle').value = todo.title || '';
+        document.getElementById('todoPriority').value = todo.priority || 'medium';
+        document.getElementById('todoDueDate').value = todo.dueDate || '';
+        document.getElementById('todoDescription').value = todo.description || '';
+    }
+
+    resetTodoForm() {
+        document.getElementById('todoForm').reset();
+    }
+
+    deleteTodo(todoId) {
+        if (confirm('Are you sure you want to delete this task?')) {
+            this.todos = this.todos.filter(t => t.id !== todoId);
+            this.saveData('todos', this.todos);
+            this.renderTodos();
+        }
+    }
+
+    toggleTodoComplete(todoId) {
+        const todo = this.todos.find(t => t.id === todoId);
+        todo.completed = !todo.completed;
+        this.saveData('todos', this.todos);
+        this.renderTodos();
+    }
+
+    renderTodos() {
+        const container = document.getElementById('todosList');
+        
+        if (this.todos.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-tasks"></i>
+                    <p>No tasks yet</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Sort todos: incomplete first, then by priority
+        const sortedTodos = [...this.todos].sort((a, b) => {
+            if (a.completed !== b.completed) {
+                return a.completed ? 1 : -1;
+            }
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+
+        container.innerHTML = sortedTodos.map(todo => `
+            <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                       onchange="app.toggleTodoComplete('${todo.id}')">
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; ${todo.completed ? 'text-decoration: line-through;' : ''}">${todo.title}</div>
+                    <div style="font-size: 12px; color: #6c757d;">
+                        <span class="status-badge status-${todo.priority}">${todo.priority}</span>
+                        ${todo.dueDate ? `<span> • Due: ${this.formatDate(todo.dueDate)}</span>` : ''}
+                    </div>
+                    ${todo.description ? `<div style="font-size: 13px; color: #666; margin-top: 5px;">${todo.description}</div>` : ''}
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn-small btn-edit" onclick="app.openTodoModal('${todo.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-small btn-delete" onclick="app.deleteTodo('${todo.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Dashboard
+    renderDashboard() {
+        const totalJobs = this.jobs.length;
+        const interviewCount = this.jobs.filter(job => job.status === 'interview').length;
+        
+        document.getElementById('totalJobs').textContent = totalJobs;
+        document.getElementById('interviewCount').textContent = interviewCount;
+
+        // Recent activity
+        const recentItems = [
+            ...this.jobs.slice(0, 3).map(job => ({
+                type: 'job',
+                title: `Applied to ${job.title} at ${job.company}`,
+                date: job.createdAt,
+                icon: 'briefcase'
+            })),
+            ...this.notes.slice(0, 2).map(note => ({
+                type: 'note',
+                title: `Added note: ${note.title}`,
+                date: note.createdAt,
+                icon: 'sticky-note'
+            }))
+        ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+        const activityContainer = document.getElementById('recentActivity');
+        if (recentItems.length === 0) {
+            activityContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-chart-line"></i>
+                    <p>No recent activity</p>
+                </div>
+            `;
+        } else {
+            activityContainer.innerHTML = recentItems.map(item => `
+                <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                    <i class="fas fa-${item.icon}" style="margin-right: 10px; color: #667eea;"></i>
+                    <div>
+                        <div style="font-size: 14px;">${item.title}</div>
+                        <div style="font-size: 12px; color: #6c757d;">${this.formatDate(item.date.split('T')[0])}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    updateStats() {
+        this.renderDashboard();
+    }
+
+    renderAll() {
+        this.renderJobs();
+        this.renderNotes();
+        this.renderWishlist();
+        this.renderTodos();
+        this.renderDashboard();
+    }
+}
+
+// Global functions for modal management
+function openJobModal(jobId) { app.openJobModal(jobId); }
+function closeJobModal() { app.closeJobModal(); }
+function openNoteModal(noteId) { app.openNoteModal(noteId); }
+function closeNoteModal() { app.closeNoteModal(); }
+function openWishlistModal(itemId) { app.openWishlistModal(itemId); }
+function closeWishlistModal() { app.closeWishlistModal(); }
+function openTodoModal(todoId) { app.openTodoModal(todoId); }
+function closeTodoModal() { app.closeTodoModal(); }
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new JobTrackerApp();
+});
+
+// Close modals when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+        if (window.app) {
+            window.app.currentEditId = null;
+        }
+    }
+});
+
+</script>
+    <script src="job-tracker-app.js"></script>
+  </body>
+</html>
